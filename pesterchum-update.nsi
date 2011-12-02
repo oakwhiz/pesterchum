@@ -23,15 +23,14 @@ Section "Pesterchum"
   SetOutPath $INSTDIR
   
   ; Put file there
-  File /r themes
   File /r smilies
   File /r quirks
-  File README.mkdn
-  File CHANGELOG.mkdn
-  File version.py
+  File /r themes
   File pesterchum.exe
   File pesterchum.exe.manifest
-
+  File version.py
+  File CHANGELOG.mkdn
+  File README.mkdn
 
   Rename $INSTDIR\README.mkdn $INSTDIR\readme.txt
   Rename $INSTDIR\CHANGELOG.mkdn $INSTDIR\changelog.txt

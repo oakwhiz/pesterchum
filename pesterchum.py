@@ -98,7 +98,9 @@ from profile import *
 canon_handles = ["apocalypseArisen", "arsenicCatnip", "arachnidsGrip", "adiosToreador", \
                  "caligulasAquarium", "cuttlefishCuller", "carcinoGeneticist", "centaursTesticle", \
                  "grimAuxiliatrix", "gallowsCalibrator", "gardenGnostic", "ectoBiologist", \
-                 "twinArmageddons", "terminallyCapricious", "turntechGodhead", "tentacleTherapist"]
+                 "twinArmageddons", "terminallyCapricious", "turntechGodhead", "tentacleTherapist", \
+                 "gutsyGumshoe", "golgothasTerror", "timaeusTestified", "tipsyGnostalgic", \
+                 "uranianUmbra"]
 
 
 class waitingMessageHolder(object):
