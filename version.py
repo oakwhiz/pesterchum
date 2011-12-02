@@ -27,11 +27,11 @@ elif OS_TYPE == "darwin":
 
 _pcMajor = "3.41"
 _pcMinor = "3"
-_pcStatus = "RC" # A  = alpha
+_pcStatus = None # A  = alpha
                 # B  = beta
                 # RC = release candidate
                 # None = public release
-_pcRevision = "2"
+_pcRevision = ""
 _pcVersion = ""
 
 def pcVerCalc():
