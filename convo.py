@@ -507,7 +507,6 @@ class PesterInput(QtGui.QLineEdit):
         QtGui.QLineEdit.keyPressEvent(self, event)
     def contextMenuEvent(self, event):
         textMenu = self.createStandardContextMenu()
-        #self.textSelected
         self.encryptMessageAction = QtGui.QAction("Encrypt using XXTEA", self)
         self.connect(self.encryptMessageAction, QtCore.SIGNAL('triggered()'),
                      self, QtCore.SLOT('encryptMessage()'))

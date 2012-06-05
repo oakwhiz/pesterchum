@@ -1,3 +1,10 @@
+Pesterchum - Cryptographic Extension
+====================================
+* Manually operated
+* Provides a simple right-click interface for some decent encryption
+* Requires that all participants share a common passphrase for messages to be read
+
+
 Welcome to Pesterchum 3.41!
 =============================
 
