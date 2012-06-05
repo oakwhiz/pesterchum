@@ -2,6 +2,7 @@ from string import Template
 import re
 import platform
 import httplib, urllib
+import cryptotools
 from time import strftime
 from copy import copy
 from datetime import datetime, timedelta
@@ -418,6 +419,11 @@ class PesterText(QtGui.QTextEdit):
     def contextMenuEvent(self, event):
         textMenu = self.createStandardContextMenu()
         if self.textSelected:
+            self.decryptMessageAction = QtGui.QAction("Decrypt using XXTEA", self)
+            self.connect(self.decryptMessageAction, QtCore.SIGNAL('triggered()'),
+                         self, QtCore.SLOT('decryptMessage()'))
+            textMenu.addAction(self.decryptMessageAction)
+
             self.submitLogAction = QtGui.QAction("Submit to Pesterchum QDB", self)
             self.connect(self.submitLogAction, QtCore.SIGNAL('triggered()'),
                          self, QtCore.SLOT('submitLog()'))
@@ -463,6 +469,18 @@ class PesterText(QtGui.QTextEdit):
             self.sending.sendinglabel.setText("F41L3D: %s" % (e))
         del self.sending
 
+    @QtCore.pyqtSlot()
+    def decryptMessage(self):
+        (passphrase, ok) = QtGui.QInputDialog.getText(self, "Crypto Passphrase", "Enter the passphrase to decrypt with:")
+        if ok:
+            cryptoinstance = cryptotools.cryptoManager(passphrase)
+            try:
+                decrypted = cryptoinstance.decrypt(cryptoinstance.decode(str(self.textCursor().selectedText())))
+            except Exception as exinst:
+                QtGui.QMessageBox.information(self, "Crypto Error", str(exinst))
+            else:
+                QtGui.QMessageBox.information(self, "Crypto Output", decrypted)
+
 class PesterInput(QtGui.QLineEdit):
     def __init__(self, theme, parent=None):
         QtGui.QLineEdit.__init__(self, parent)
@@ -487,6 +505,51 @@ class PesterInput(QtGui.QLineEdit):
             self.parent().textArea.keyPressEvent(event)
         self.parent().mainwindow.idletime = 0
         QtGui.QLineEdit.keyPressEvent(self, event)
+    def contextMenuEvent(self, event):
+        textMenu = self.createStandardContextMenu()
+        #self.textSelected
+        self.encryptMessageAction = QtGui.QAction("Encrypt using XXTEA", self)
+        self.connect(self.encryptMessageAction, QtCore.SIGNAL('triggered()'),
+                     self, QtCore.SLOT('encryptMessage()'))
+        textMenu.addAction(self.encryptMessageAction)
+
+        self.decryptMessageAction = QtGui.QAction("Decrypt using XXTEA", self)
+        self.connect(self.decryptMessageAction, QtCore.SIGNAL('triggered()'),
+                     self, QtCore.SLOT('decryptMessage()'))
+        textMenu.addAction(self.decryptMessageAction)
+        textMenu.exec_(event.globalPos())
+
+    @QtCore.pyqtSlot()
+    def encryptMessage(self):
+        (passphrase, ok) = QtGui.QInputDialog.getText(self, "Crypto Passphrase", "Enter the passphrase to encrypt with:")
+        if self.selectionStart() == -1:
+            self.selectAll()
+        if ok:
+            cryptoinstance = cryptotools.cryptoManager(passphrase)
+            try:
+                encrypted = cryptoinstance.encode(cryptoinstance.encrypt(str(self.selectedText())))
+            except Exception as exinst:
+                QtGui.QMessageBox.information(self, "Crypto Error", str(exinst))
+            else:
+                self.insert(encrypted)
+                #QtGui.QMessageBox.information(self, "Crypto Output", encrypted)
+        self.deselect()
+
+    @QtCore.pyqtSlot()
+    def decryptMessage(self):
+        (passphrase, ok) = QtGui.QInputDialog.getText(self, "Crypto Passphrase", "Enter the passphrase to decrypt with:")
+        if self.selectionStart() == -1:
+            self.selectAll()
+        if ok:
+            cryptoinstance = cryptotools.cryptoManager(passphrase)
+            try:
+                decrypted = cryptoinstance.decrypt(cryptoinstance.decode(str(self.selectedText())))
+            except Exception as exinst:
+                QtGui.QMessageBox.information(self, "Crypto Error", str(exinst))
+            else:
+                QtGui.QMessageBox.information(self, "Crypto Output", decrypted)
+        self.deselect()
+
 
 class PesterConvo(QtGui.QFrame):
     def __init__(self, chum, initiated, mainwindow, parent=None):
